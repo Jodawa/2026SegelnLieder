@@ -9,9 +9,12 @@
 		songs.filter(
 			(song) =>
 				song.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				(song.artist && song.artist.toLowerCase().includes(searchQuery.toLowerCase())) ||
-				song.filename.toLowerCase().includes(searchQuery.toLowerCase())
-		)
+				(song.artist &&
+					song.artist
+						.toLowerCase()
+						.includes(searchQuery.toLowerCase())) ||
+				song.filename.toLowerCase().includes(searchQuery.toLowerCase()),
+		),
 	);
 
 	function clearSearch() {
@@ -34,7 +37,7 @@
 		<div class="flex items-center justify-between h-16 gap-4">
 			<!-- Logo / Brand Link -->
 			<a
-				href="/"
+				href="/main"
 				onclick={closeMenu}
 				class="flex items-center gap-2.5 group shrink-0"
 			>
@@ -104,8 +107,12 @@
 		<div
 			class="border-t border-slate-800/80 bg-slate-950/95 backdrop-blur-2xl px-4 py-4 space-y-2 shadow-2xl max-h-[75vh] overflow-y-auto"
 		>
-			<div class="flex items-center justify-between px-2 pb-2 border-b border-slate-800/60">
-				<span class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+			<div
+				class="flex items-center justify-between px-2 pb-2 border-b border-slate-800/60"
+			>
+				<span
+					class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5"
+				>
 					<Music class="w-3.5 h-3.5 text-cyan-400" />
 					Liederübersicht ({filteredSongs.length})
 				</span>
@@ -116,20 +123,28 @@
 					Kein Lied gefunden für "{searchQuery}"
 				</div>
 			{:else}
-				<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 pt-1">
+				<div
+					class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 pt-1"
+				>
 					{#each filteredSongs as song}
 						<a
 							href="/?song={song.id}"
 							onclick={closeMenu}
 							class="flex flex-col p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:bg-slate-800/80 hover:border-cyan-500/40 text-left transition-all group"
 						>
-							<span class="text-sm font-semibold text-white group-hover:text-cyan-300 transition-colors">
+							<span
+								class="text-sm font-semibold text-white group-hover:text-cyan-300 transition-colors"
+							>
 								{song.title}
 							</span>
 							{#if song.artist}
-								<span class="text-xs text-slate-400 mt-0.5">{song.artist}</span>
+								<span class="text-xs text-slate-400 mt-0.5"
+									>{song.artist}</span
+								>
 							{/if}
-							<span class="text-[10px] text-slate-500 font-mono mt-1">
+							<span
+								class="text-[10px] text-slate-500 font-mono mt-1"
+							>
 								{song.filename}
 							</span>
 						</a>
