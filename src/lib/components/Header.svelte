@@ -37,7 +37,7 @@
 		<div class="flex items-center justify-between h-16 gap-4">
 			<!-- Logo / Brand Link -->
 			<a
-				href="/main"
+				href="/"
 				onclick={closeMenu}
 				class="flex items-center gap-2.5 group shrink-0"
 			>
