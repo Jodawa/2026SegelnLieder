@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ShipWheel, Search, X, Menu, Music } from "@lucide/svelte";
+	import { Music, Search, X, Menu } from "@lucide/svelte";
 	import { songs } from "$lib/songs";
 
 	let searchQuery = $state("");
@@ -36,26 +36,22 @@
 	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 		<div class="flex items-center justify-between h-16 gap-4">
 			<!-- Logo / Brand Link -->
-			<a
-				href="/main"
-				onclick={closeMenu}
-				class="flex items-center gap-2.5 group shrink-0"
-			>
+			<div class="flex items-center gap-2.5 group shrink-0">
 				<div
-					class="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 via-indigo-500 to-purple-500 p-[1px] shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform duration-300"
+					class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 via-orange-500 to-red-500 p-[1px] shadow-lg shadow-amber-500/20 group-hover:scale-105 transition-transform duration-300"
 				>
 					<div
 						class="w-full h-full bg-slate-950 rounded-[11px] flex items-center justify-center"
 					>
-						<ShipWheel class="text-white" />
+						<Music class="text-white" />
 					</div>
 				</div>
 				<span
-					class="font-heading font-bold text-base tracking-tight text-white group-hover:text-cyan-300 transition-colors hidden sm:inline"
+					class="font-heading font-bold text-base tracking-tight text-white group-hover:text-amber-300 transition-colors hidden sm:inline"
 				>
-					Segelfreizeit 2026
+					Liederheft
 				</span>
-			</a>
+			</div>
 
 			<!-- Search Field -->
 			<div class="flex-1 max-w-md mx-2 sm:mx-4">
@@ -65,7 +61,7 @@
 						bind:value={searchQuery}
 						onfocus={() => (menuOpen = true)}
 						placeholder="Lieder oder Interpreten suchen..."
-						class="w-full pl-9 pr-8 py-1.5 bg-slate-900/80 border border-slate-700/60 rounded-xl text-xs sm:text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all shadow-inner"
+						class="w-full pl-9 pr-8 py-1.5 bg-slate-900/80 border border-slate-700/60 rounded-xl text-xs sm:text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all shadow-inner"
 					/>
 					<!-- Search Icon -->
 					<Search
@@ -113,7 +109,7 @@
 				<span
 					class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5"
 				>
-					<Music class="w-3.5 h-3.5 text-cyan-400" />
+					<Music class="w-3.5 h-3.5 text-amber-400" />
 					Liederübersicht ({filteredSongs.length})
 				</span>
 			</div>
@@ -130,10 +126,10 @@
 						<a
 							href="/?song={song.id}"
 							onclick={closeMenu}
-							class="flex flex-col p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:bg-slate-800/80 hover:border-cyan-500/40 text-left transition-all group"
+							class="flex flex-col p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:bg-slate-800/80 hover:border-amber-500/40 text-left transition-all group"
 						>
 							<span
-								class="text-sm font-semibold text-white group-hover:text-cyan-300 transition-colors"
+								class="text-sm font-semibold text-white group-hover:text-amber-300 transition-colors"
 							>
 								{song.title}
 							</span>

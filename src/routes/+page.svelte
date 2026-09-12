@@ -10,8 +10,7 @@
 </script>
 
 <svelte:head>
-	<title>{activeSong ? activeSong.title + " - " : ""}Segelfreizeit 2026</title
-	>
+	<title>{activeSong ? activeSong.title + " - " : ""}Liederheft</title>
 </svelte:head>
 
 <!-- Hero Section -->
