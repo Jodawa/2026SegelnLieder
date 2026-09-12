@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Columns2 } from "@lucide/svelte";
+	import { Columns2, Play, Pause } from "@lucide/svelte";
 
 	interface Props {
 		chordproText: string;
@@ -9,6 +9,44 @@
 
 	let transposeOffset = $state(0);
 	let columnMode = $state<"auto" | "1" | "2">("auto");
+
+	// Auto-scroll state
+	let isAutoScrolling = $state(false);
+	let scrollSpeed = $state(1); // 1 (slow) to 5 (fast)
+
+	function toggleAutoScroll() {
+		isAutoScrolling = !isAutoScrolling;
+	}
+
+	function increaseSpeed() {
+		if (scrollSpeed < 5) scrollSpeed += 1;
+	}
+
+	function decreaseSpeed() {
+		if (scrollSpeed > 1) scrollSpeed -= 1;
+	}
+
+	$effect(() => {
+		if (isAutoScrolling) {
+			const interval = setInterval(() => {
+				const currentScroll = window.scrollY;
+				const maxScroll =
+					document.documentElement.scrollHeight - window.innerHeight;
+
+				if (currentScroll >= maxScroll - 5) {
+					isAutoScrolling = false;
+					return;
+				}
+
+				window.scrollBy({
+					top: scrollSpeed * 0.5,
+					behavior: "instant",
+				});
+			}, 30);
+
+			return () => clearInterval(interval);
+		}
+	});
 
 	const NOTES_SHARP = [
 		"C",
@@ -143,7 +181,10 @@
 				else if (lowerName === "tempo") tempo = val;
 				else if (lowerName === "time") time = val;
 				else if (lowerName === "comment" || lowerName === "c") {
-					if (currentSection.lines.length > 0 || currentSection.comment) {
+					if (
+						currentSection.lines.length > 0 ||
+						currentSection.comment
+					) {
 						sections.push(currentSection);
 						currentSection = { lines: [] };
 					}
@@ -264,12 +305,66 @@
 
 		<!-- Song Meta & Transpose & View Controls -->
 		<div class="flex flex-wrap items-center gap-3">
+			<!-- Auto-Scroll Control Bar -->
+			<div
+				class="inline-flex items-center gap-1 bg-slate-900/90 border border-slate-700/60 rounded-xl p-1 shadow-inner"
+			>
+				<button
+					type="button"
+					onclick={toggleAutoScroll}
+					title={isAutoScrolling
+						? "Auto-Scroll pausieren"
+						: "Auto-Scroll starten"}
+					class="px-2.5 py-1 rounded-lg {isAutoScrolling
+						? 'bg-amber-500 text-slate-950 font-bold'
+						: 'bg-slate-800 hover:bg-amber-500/20 text-slate-200 hover:text-amber-300'} text-xs font-semibold flex items-center gap-1.5 transition-all border border-slate-700/50 cursor-pointer"
+				>
+					{#if isAutoScrolling}
+						<Pause class="w-3.5 h-3.5 fill-current" />
+						<span>Pause</span>
+					{:else}
+						<Play class="w-3.5 h-3.5 fill-current" />
+						<span>Auto-Scroll</span>
+					{/if}
+				</button>
+
+				{#if isAutoScrolling || scrollSpeed !== 2}
+					<div
+						class="flex items-center gap-0.5 px-1 border-l border-slate-800 ml-0.5"
+					>
+						<button
+							type="button"
+							onclick={decreaseSpeed}
+							disabled={scrollSpeed <= 1}
+							aria-label="Langsamer scrollen"
+							class="w-5 h-5 rounded bg-slate-800 hover:bg-slate-700 disabled:opacity-30 text-slate-200 text-[10px] font-bold flex items-center justify-center border border-slate-700/50 cursor-pointer"
+						>
+							−
+						</button>
+						<span
+							class="px-1 font-mono text-[11px] font-bold text-amber-400 min-w-[20px] text-center"
+						>
+							{scrollSpeed}x
+						</span>
+						<button
+							type="button"
+							onclick={increaseSpeed}
+							disabled={scrollSpeed >= 5}
+							aria-label="Schneller scrollen"
+							class="w-5 h-5 rounded bg-slate-800 hover:bg-slate-700 disabled:opacity-30 text-slate-200 text-[10px] font-bold flex items-center justify-center border border-slate-700/50 cursor-pointer"
+						>
+							+
+						</button>
+					</div>
+				{/if}
+			</div>
+
 			<!-- Column View Mode Switcher -->
 			<button
 				type="button"
 				onclick={toggleColumnMode}
 				title="Spaltenansicht umschalten"
-				class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/60 text-slate-300 hover:text-amber-300 font-semibold text-xs transition-all shadow-inner"
+				class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/60 text-slate-300 hover:text-amber-300 font-semibold text-xs transition-all shadow-inner cursor-pointer"
 			>
 				<Columns2 class="w-4 h-4 text-amber-400" />
 				<span>
@@ -293,7 +388,7 @@
 					type="button"
 					onclick={transposeDown}
 					aria-label="Einen Halbton tiefer"
-					class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-amber-500/20 text-slate-200 hover:text-amber-300 font-bold text-sm flex items-center justify-center transition-all border border-slate-700/50"
+					class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-amber-500/20 text-slate-200 hover:text-amber-300 font-bold text-sm flex items-center justify-center transition-all border border-slate-700/50 cursor-pointer"
 				>
 					−
 				</button>
@@ -308,7 +403,7 @@
 					type="button"
 					onclick={transposeUp}
 					aria-label="Einen Halbton höher"
-					class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-amber-500/20 text-slate-200 hover:text-amber-300 font-bold text-sm flex items-center justify-center transition-all border border-slate-700/50"
+					class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-amber-500/20 text-slate-200 hover:text-amber-300 font-bold text-sm flex items-center justify-center transition-all border border-slate-700/50 cursor-pointer"
 				>
 					+
 				</button>
@@ -316,7 +411,7 @@
 					<button
 						type="button"
 						onclick={resetTranspose}
-						class="text-[10px] uppercase font-semibold text-slate-400 hover:text-white px-2 transition-colors"
+						class="text-[10px] uppercase font-semibold text-slate-400 hover:text-white px-2 transition-colors cursor-pointer"
 					>
 						Reset
 					</button>
@@ -347,7 +442,8 @@
 						{/each}
 					</select>
 					{#if transposeOffset !== 0}
-						<span class="text-[10px] text-slate-400 ml-0.5 hidden sm:inline"
+						<span
+							class="text-[10px] text-slate-400 ml-0.5 hidden sm:inline"
 							>(Orig: {parsedSong.key})</span
 						>
 					{/if}

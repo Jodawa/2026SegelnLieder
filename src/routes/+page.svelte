@@ -4,17 +4,10 @@
 		songs,
 		filterSongsByTags,
 		activeTags,
-		type TagConfig,
 	} from "$lib/songs";
 	import ChordProViewer from "$lib/components/ChordProViewer.svelte";
 
-	let tags: TagConfig[] = $state([
-		{ name: "Worship", value: true },
-		{ name: "Secular", value: false },
-		{ name: "Sail", value: false },
-	]);
-
-	let availableSongs = $derived(filterSongsByTags(songs, tags));
+	let availableSongs = $derived(filterSongsByTags(songs, activeTags));
 
 	let selectedSongId = $derived($page.url.searchParams.get("song"));
 	let activeSong = $derived(

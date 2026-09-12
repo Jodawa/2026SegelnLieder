@@ -34,8 +34,9 @@ export const songs: SongData[] = Object.entries(rawSongs).map(([path, content]) 
 	return { id, filename, title, artist, tags, content };
 });
 
-export let activeTags: TagConfig[] = [
+export const activeTags: TagConfig[] = [
 	{ name: "Worship", value: true },
+	{ name: "Secular", value: false },
 	{ name: "Sail", value: false }
 ];
 
@@ -48,7 +49,7 @@ export function filterSongsByTags(allSongs: SongData[], tagConfigs: TagConfig[] 
 		// Lieder ohne Tags werden immer angezeigt
 		if (song.tags.length === 0) return true;
 
-		// Lieder mit Tags werden nur angezeigt, wenn mindestens ein Tag aktiv ist
+		// Lieder mit Tags werden angezeigt, wenn mindestens ein Tag aktiv ist
 		return song.tags.some((tag) => enabledTagNames.includes(tag.toLowerCase()));
 	});
 }
