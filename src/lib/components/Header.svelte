@@ -1,12 +1,14 @@
 <script lang="ts">
 	import { Music, Search, X, Menu } from "@lucide/svelte";
-	import { songs } from "$lib/songs";
+	import { songs, filterSongsByTags, activeTags } from "$lib/songs";
 
 	let searchQuery = $state("");
 	let menuOpen = $state(false);
 
+	let tagFilteredSongs = $derived(filterSongsByTags(songs, activeTags));
+
 	let filteredSongs = $derived(
-		songs.filter(
+		tagFilteredSongs.filter(
 			(song) =>
 				song.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
 				(song.artist &&
