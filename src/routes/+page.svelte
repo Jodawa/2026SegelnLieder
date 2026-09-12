@@ -1,13 +1,10 @@
 <script lang="ts">
 	import { page } from "$app/stores";
-	import {
-		songs,
-		filterSongsByTags,
-		activeTags,
-	} from "$lib/songs";
+	import { songs, filterSongsByTags } from "$lib/songs";
+	import { activeTagsStore } from "$lib/tagStore";
 	import ChordProViewer from "$lib/components/ChordProViewer.svelte";
 
-	let availableSongs = $derived(filterSongsByTags(songs, activeTags));
+	let availableSongs = $derived(filterSongsByTags(songs, $activeTagsStore));
 
 	let selectedSongId = $derived($page.url.searchParams.get("song"));
 	let activeSong = $derived(
