@@ -37,7 +37,8 @@ export const songs: SongData[] = Object.entries(rawSongs).map(([path, content]) 
 export const activeTags: TagConfig[] = [
 	{ name: "Worship", value: true },
 	{ name: "Secular", value: false },
-	{ name: "Sail", value: false }
+	{ name: "Sail", value: false },
+	{ name: "Kids", value: false }
 ];
 
 export function filterSongsByTags(allSongs: SongData[], tagConfigs: TagConfig[] = activeTags): SongData[] {
